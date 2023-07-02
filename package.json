@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/slava1000uk/nodejs-crud-api/issues"
   },
-  "homepage": "https://github.com/slava1000uk/nodejs-crud-api#readme"
+  "homepage": "https://github.com/slava1000uk/nodejs-crud-api#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
 }
