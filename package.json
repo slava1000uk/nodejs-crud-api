@@ -1,0 +1,24 @@
+{
+  "name": "nodejs-crud-api",
+  "version": "1.0.0",
+  "description": "Implement simple CRUD API using in-memory database underneath.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slava1000uk/nodejs-crud-api.git"
+  },
+  "keywords": [
+    "crud",
+    "api"
+  ],
+  "author": "slava1000uk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/slava1000uk/nodejs-crud-api/issues"
+  },
+  "homepage": "https://github.com/slava1000uk/nodejs-crud-api#readme"
+}
