@@ -1,4 +1,5 @@
 import http from "node:http";
+import { User } from "./types/types";
 
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
@@ -6,7 +7,7 @@ const server = http.createServer((req, res) => {
   res.end(JSON.stringify({ data: 'Viacheslav Tyshchuk' }));
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT || 4000);
 
 server.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
