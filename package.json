@@ -2,13 +2,12 @@
   "name": "nodejs-crud-api",
   "version": "1.0.0",
   "description": "Implement simple CRUD API using in-memory database underneath.",
-  "main": "./src/index.ts",
+  "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./dist/inedx.js",
-    "dev": "nodemon ./src/index.ts"
-
+    "watch": "tsc -w",
+    "start:dev": "nodemon ./dist/index.js"
   },
   "repository": {
     "type": "git",
