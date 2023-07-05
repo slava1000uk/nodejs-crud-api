@@ -1,6 +1,22 @@
 import { IncomingMessage, ServerResponse, createServer } from "node:http";
 import { config } from "dotenv";
 import process from "node:process";
+import { randomUUID } from "node:crypto";
+
+enum HTTP_METHOD {
+  GET = "GET",
+  POST = "POST",
+  PUT = "PUT",
+  DELETE = "DELETE"
+}
+
+enum HTTP_STATUS_CODE {
+  OK = 200,
+  CREATED = 201,
+  NOT_FOUND = 404,
+  BAD_REQUEST = 400,
+  INTERNAL_SERVER_ERROR = 500
+}
 
 interface  UserNoId  {
   username: string;
@@ -36,11 +52,54 @@ const getUserById = (id: string) => {
   return userById;
 };
 
+const getDataFromPost = (request: IncomingMessage) => {
+   let body ='';
+   let result = {};
+
+   request.on('data', (chunk) => {
+    body += chunk;
+   });
+
+   request.on('end', () => {
+    result = JSON.parse(body);
+   });
+
+   return result;
+   
+};
+
+const validateDataFromPost = (body:UserNoId) => {
+  const { username, age, hobbies } = body;
+
+  return (typeof username === 'string' && 
+          typeof age === 'number' &&
+          Array.isArray(hobbies) &&
+          hobbies.every(hobbie => typeof hobbie === 'string')
+         );
+
+};
+
+const createUser = (request: IncomingMessage, response: ServerResponse<IncomingMessage>) => {
+  const body = getDataFromPost(request);// 1 get data from request
+  if (validateDataFromPost(body)) {// 2 validate data
+    
+    const { username, age, hobbies } = body;
+    
+    //create id and make user with id
+    const user = { ...body, id: randomUUID() };
+
+    users.push(user);
+  }
+
+  return;
+
+};
+
 
 
 const server = createServer((request: IncomingMessage, response: ServerResponse<IncomingMessage>) => {
   
-  const isUrlEndsWithUsers:boolean = 
+  const isEndpointAllUsers:boolean = 
         (request.url === '/api/users') || (request.url === '/api/users/');
   
   let output: any;
@@ -51,8 +110,8 @@ const server = createServer((request: IncomingMessage, response: ServerResponse<
 
   try {
     switch (request.method) {
-      case 'GET':
-        if (isUrlEndsWithUsers) {
+      case HTTP_METHOD.GET:
+        if (isEndpointAllUsers) {
           output = getAllUsers();
 
         } else {
@@ -60,6 +119,13 @@ const server = createServer((request: IncomingMessage, response: ServerResponse<
           if (id) { output = getUserById(id); }
         }
         break;
+
+      case HTTP_METHOD.POST:
+        if (isEndpointAllUsers) {
+          createUser(request,response);
+        }
+
+      break;
     
       default:
         console.error(`${request.method} not working`);
@@ -70,7 +136,7 @@ const server = createServer((request: IncomingMessage, response: ServerResponse<
     console.error(error);
   }
   
-  response.statusCode = 200;
+  response.statusCode = HTTP_STATUS_CODE.OK;
   response.end(JSON.stringify(output));
 
 });
