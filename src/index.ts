@@ -3,19 +3,9 @@ import { config } from "dotenv";
 import process from "node:process";
 import { randomUUID } from "node:crypto";
 import { HTTP_METHOD, HTTP_STATUS_CODE, DEFAULT_PORT, URL_BEFORE_ID_REGEXP } from "./constants";
+import { UserNoId, UserWithId } from "./types/types";
 
 
-
-
-interface  UserNoId  {
-  username: string;
-  age: number;
-  hobbies: string[];
-};
-
-interface UserWithId extends UserNoId {
-  id: string;
-};
 
 let users: UserWithId[] = [];
 
