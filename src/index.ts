@@ -2,7 +2,7 @@ import { IncomingMessage, ServerResponse, createServer } from "node:http";
 import { config } from "dotenv";
 import process from "node:process";
 import { randomUUID } from "node:crypto";
-import { HTTP_METHOD, HTTP_STATUS_CODE, DEFAULT_PORT } from "./constants";
+import { HTTP_METHOD, HTTP_STATUS_CODE, DEFAULT_PORT, URL_BEFORE_ID_REGEXP } from "./constants";
 
 
 
@@ -23,8 +23,6 @@ let users: UserWithId[] = [];
 
 const getAllUsers = () => users;
 
-
-const URL_BEFORE_ID_REGEXP = /^\/api\/users\/$/;
 
 const getIdFromURL = (url: string):string => {
   let id = url.replace(URL_BEFORE_ID_REGEXP, '');
