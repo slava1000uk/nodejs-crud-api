@@ -1,5 +1,6 @@
 import { IncomingMessage, ServerResponse, createServer } from "node:http";
-// import { User } from "./types/types";
+import { config } from "dotenv";
+import process from "node:process";
 
 interface  UserNoId  {
   username: string;
@@ -18,7 +19,7 @@ let users: UserWithId[] = [];
 const getAllUsers = () => users;
 
 
-const URL_BEFORE_ID_REGEXP:RegExp = /^\/api\/users\/$/;
+const URL_BEFORE_ID_REGEXP = /^\/api\/users\/$/;
 
 const getIdFromURL = (url: string):string => {
   let id = url.replace(URL_BEFORE_ID_REGEXP, '');
@@ -74,7 +75,7 @@ const server = createServer((request: IncomingMessage, response: ServerResponse<
 
 });
 
-
+config();
 const DEFAULT_PORT:number = 4000;
 const PORT = Number(process.env.PORT || DEFAULT_PORT);
 
