@@ -12,8 +12,9 @@ const constants_1 = require("./constants");
 ;
 let users = [];
 const getAllUsers = () => users;
+const URL_BEFORE_ID_REGEXP = /^\/api\/users\/$/;
 const getIdFromURL = (url) => {
-    let id = url.replace(constants_1.URL_BEFORE_ID_REGEXP, '');
+    let id = url.replace(URL_BEFORE_ID_REGEXP, '');
     if (id.endsWith('/')) {
         id = id.slice(0, id.length - 1);
     }
@@ -55,6 +56,8 @@ const server = (0, node_http_1.createServer)((request, response) => {
     const isEndpointAllUsers = (request.url === '/api/users') || (request.url === '/api/users/');
     let output;
     response.setHeader("Content-Type", "application/json");
+    // response.statusCode = 200;
+    // response.end(JSON.stringify({ data: 'Viacheslav Tyshchuk' }));
     try {
         switch (request.method) {
             case constants_1.HTTP_METHOD.GET:
