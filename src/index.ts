@@ -2,21 +2,10 @@ import { IncomingMessage, ServerResponse, createServer } from "node:http";
 import { config } from "dotenv";
 import process from "node:process";
 import { randomUUID } from "node:crypto";
+import { HTTP_METHOD, HTTP_STATUS_CODE, DEFAULT_PORT } from "./constants";
 
-enum HTTP_METHOD {
-  GET = "GET",
-  POST = "POST",
-  PUT = "PUT",
-  DELETE = "DELETE"
-}
 
-enum HTTP_STATUS_CODE {
-  OK = 200,
-  CREATED = 201,
-  NOT_FOUND = 404,
-  BAD_REQUEST = 400,
-  INTERNAL_SERVER_ERROR = 500
-}
+
 
 interface  UserNoId  {
   username: string;
@@ -142,7 +131,7 @@ const server = createServer((request: IncomingMessage, response: ServerResponse<
 });
 
 config();
-const DEFAULT_PORT:number = 4000;
+
 const PORT = Number(process.env.PORT || DEFAULT_PORT);
 
 server.listen(PORT, () => {
