@@ -11,8 +11,9 @@ export const getIdFromRequestURL = (url: string): string => {
   return id;
 };
 
-export const getDataFromPostRequest = (request: IncomingMessage) => {
-  new Promise((resolve, reject) => {
+export const getDataFromPostRequest = (request: IncomingMessage): Promise<string> => {
+  
+  return new Promise((resolve, reject) => {
     try {
       let body = '';
 
@@ -21,7 +22,11 @@ export const getDataFromPostRequest = (request: IncomingMessage) => {
       });
 
       request.on('end', () => {
-        resolve(JSON.parse(body));
+        resolve(body);
+      });
+
+      request.on('error', () => {
+        reject('Invalid request');
       });
 
     } catch (error) {
