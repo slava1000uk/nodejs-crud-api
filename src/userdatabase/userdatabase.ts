@@ -1,5 +1,5 @@
 import { UserNoId, UserWithId } from "../types/types";
-import { randomUUID } from "node:crypto";
+import { v4 as uuidv4 } from "uuid";
 
 let users: UserWithId[] = [];
 
@@ -11,7 +11,7 @@ export const getUserById = (id: string) => {
 };
 
 export const createUserWithId = (user:UserNoId) => {
-  const userWithId = { ...user, id: randomUUID() };
+  const userWithId = { ...user, id: uuidv4() };
 
   users.push(userWithId);
 
