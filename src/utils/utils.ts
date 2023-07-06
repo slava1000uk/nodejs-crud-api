@@ -11,6 +11,13 @@ export const getIdFromRequestURL = (url: string): string => {
   return id;
 };
 
+export const hasRequestUrlId = (url: string | undefined): boolean => {
+  if( url && getIdFromRequestURL(url) ) return true;
+  
+  return false;
+};
+
+
 export const getDataFromRequest = (request: IncomingMessage): Promise<string> => {
 
   return new Promise((resolve, reject) => {
