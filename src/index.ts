@@ -5,7 +5,7 @@ import { randomUUID } from "node:crypto";
 import { HTTP_METHOD, HTTP_STATUS_CODE, DEFAULT_PORT, URL_BEFORE_ID_REGEXP } from "./constants";
 import { UserNoId, UserWithId } from "./types/types";
 import { getAllUsers, getOneUser, createUser, updateUser, deleteUser } from "./action-methods/action-methods";
-import { getIdFromRequestURL } from "./utils/utils"
+import { getIdFromRequestURL, hasRequestUrlId } from "./utils/utils"
 
 
 
@@ -23,22 +23,31 @@ const server = createServer((request: IncomingMessage, response: ServerResponse<
         if (isEndpointUsers) {
           getAllUsers(response);
 
+        } else if (request.url && hasRequestUrlId(request.url)) {
+          const id = getIdFromRequestURL(request.url);
+          getOneUser(id, response);
         } else {
-          const id = request.url? getIdFromRequestURL(request.url): undefined;
-
-          if(id) getOneUser(id, response);
+          response.statusCode = HTTP_STATUS_CODE.BAD_REQUEST;
+          response.end(JSON.stringify({
+            message: request.url ? "Url doesn't have user id" : "Url is not correct" 
+          }));
         }
         break;
 
-        
+
       case HTTP_METHOD.POST:
-        if (isEndpointUsers) createUser(request,response);
-      
+        if (isEndpointUsers) {
+          createUser(request, response);
+        } else {
+          response.statusCode = HTTP_STATUS_CODE.BAD_REQUEST;
+          response.end(JSON.stringify({ message: "Url is not correct" }));
+        }
+      break;
+
+      case HTTP_METHOD.PUT:
+        
       break;
     
-      default:
-        console.error(`${request.method} not working`);
-        break;
     }
     
   } catch (error) {
