@@ -23,6 +23,8 @@ export const updateUserById = (id:string, userData: UserNoId) => {
 
   users[indexToUpdateUser] = { ...users[indexToUpdateUser], ...userData };
 
+  return users[indexToUpdateUser];
+
 };
 
 export const removeUserById = (id: string) => {

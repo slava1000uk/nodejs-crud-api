@@ -3,6 +3,7 @@ import { UserNoId, UserWithId } from "../types/types";
 import { IncomingMessage, ServerResponse } from "node:http";
 import { HTTP_STATUS_CODE } from "../constants";
 import { validUserId, validateUserKeys, validateUserFieldsType } from "../validations/validations";
+import { getIdFromRequestURL, getDataFromRequest } from "../utils/utils";
 
 export const getAllUsers = (response: ServerResponse) => {
   try {
@@ -23,7 +24,8 @@ export const getOneUser = (id: string, response: ServerResponse) => {
       const user = Userdatabase.getUserById(id);
 
       if (!user) {
-        //send handleUserNotFound(id, response) user not found
+        response.statusCode = HTTP_STATUS_CODE.NOT_FOUND;
+        response.end(JSON.stringify({ message: `User with id: ${id} not found`}));
       } else {
         response.statusCode = HTTP_STATUS_CODE.OK;
         response.end(JSON.stringify(user));
@@ -31,9 +33,10 @@ export const getOneUser = (id: string, response: ServerResponse) => {
     }
 };
 
-export const createUser = (request: IncomingMessage, response: ServerResponse) => {
+export const createUser = async (request: IncomingMessage, response: ServerResponse) => {
   try {
-    const userData = getDataFromPostRequest(request);
+    const body = await getDataFromRequest(request);
+    const userData = JSON.parse(body);
 
     if ( validateUserKeys(userData, response) && validateUserFieldsType(userData, response) ) {
 
@@ -47,5 +50,44 @@ export const createUser = (request: IncomingMessage, response: ServerResponse) =
   } catch (error) {
     console.error('Problem with creating user');
   }
+};
+
+export const updateUser = async (id: string, request: IncomingMessage, response: ServerResponse) => {
+  
+  if (validUserId(id, response)) {
+
+    const currentUser = Userdatabase.getUserById(id);
+
+    if (!currentUser) {
+      response.statusCode = HTTP_STATUS_CODE.NOT_FOUND;
+      response.end(JSON.stringify({ message: `User with id: ${id} not found` }));
+      return;
+    }
+
+      try {
+        const body = await getDataFromRequest(request);
+        const newUserData = JSON.parse(body);
+
+        if (validateUserKeys(newUserData, response) && validateUserFieldsType(newUserData, response)) {
+
+          const userDataToUpdate = {
+            username: newUserData.username || currentUser.username,
+            age: newUserData.age || currentUser.age,
+            hobbies: newUserData.hobbies || currentUser.hobbies
+          };
+
+          const updatedUser = Userdatabase.updateUserById(id, userDataToUpdate);
+
+          response.statusCode = HTTP_STATUS_CODE.OK;
+          response.end(JSON.stringify(updatedUser));
+
+        }
+
+      } catch (error) {
+        console.error('Problem with upfating user');
+      }
+
+  }
+
 };
 

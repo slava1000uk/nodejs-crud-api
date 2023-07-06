@@ -11,8 +11,8 @@ export const getIdFromRequestURL = (url: string): string => {
   return id;
 };
 
-export const getDataFromPostRequest = (request: IncomingMessage): Promise<string> => {
-  
+export const getDataFromRequest = (request: IncomingMessage): Promise<string> => {
+
   return new Promise((resolve, reject) => {
     try {
       let body = '';
