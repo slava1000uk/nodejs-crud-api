@@ -7,12 +7,6 @@ import { UserNoId, UserWithId } from "./types/types";
 
 
 
-let users: UserWithId[] = [];
-
-
-
-const getAllUsers = () => users;
-
 
 const getIdFromURL = (url: string):string => {
   let id = url.replace(URL_BEFORE_ID_REGEXP, '');
@@ -24,10 +18,7 @@ const getIdFromURL = (url: string):string => {
   return id;
 };
 
-const getUserById = (id: string) => {
-  const userById = users.find(user => user.id === id);
-  return userById;
-};
+
 
 const getDataFromPost = (request: IncomingMessage) => {
    let body ='';
@@ -89,7 +80,7 @@ const server = createServer((request: IncomingMessage, response: ServerResponse<
     switch (request.method) {
       case HTTP_METHOD.GET:
         if (isEndpointAllUsers) {
-          output = getAllUsers();
+          output = getAllUsers(response);
 
         } else {
           const id = request.url? getIdFromURL(request.url): '';
