@@ -6,81 +6,19 @@ import { HTTP_METHOD, HTTP_STATUS_CODE, DEFAULT_PORT, URL_BEFORE_ID_REGEXP } fro
 import { UserNoId, UserWithId } from "./types/types";
 
 
-
-
-const getIdFromURL = (url: string):string => {
-  let id = url.replace(URL_BEFORE_ID_REGEXP, '');
-
-  if (id.endsWith('/')) {
-    id = id.slice(0, id.length - 1);
-  }
-
-  return id;
-};
-
-
-
-const getDataFromPost = (request: IncomingMessage) => {
-   let body ='';
-   let result = {};
-
-   request.on('data', (chunk) => {
-    body += chunk;
-   });
-
-   request.on('end', () => {
-    result = JSON.parse(body);
-   });
-
-   return result;
-   
-};
-
-const validateDataFromPost = (body:UserNoId) => {
-  const { username, age, hobbies } = body;
-
-  return (typeof username === 'string' && 
-          typeof age === 'number' &&
-          Array.isArray(hobbies) &&
-          hobbies.every(hobbie => typeof hobbie === 'string')
-         );
-
-};
-
-const createUser = (request: IncomingMessage, response: ServerResponse<IncomingMessage>) => {
-  const body = getDataFromPost(request);// 1 get data from request
-  if (validateDataFromPost(body)) {// 2 validate data
-    
-    const { username, age, hobbies } = body;
-    
-    //create id and make user with id
-    const user = { ...body, id: randomUUID() };
-
-    users.push(user);
-  }
-
-  return;
-
-};
-
-
-
 const server = createServer((request: IncomingMessage, response: ServerResponse<IncomingMessage>) => {
   
   const isEndpointAllUsers:boolean = 
         (request.url === '/api/users') || (request.url === '/api/users/');
-  
-  let output: any;
+
 
   response.setHeader("Content-Type", "application/json");
-  // response.statusCode = 200;
-  // response.end(JSON.stringify({ data: 'Viacheslav Tyshchuk' }));
 
   try {
     switch (request.method) {
       case HTTP_METHOD.GET:
         if (isEndpointAllUsers) {
-          output = getAllUsers(response);
+          getAllUsers(response);
 
         } else {
           const id = request.url? getIdFromURL(request.url): '';
@@ -103,9 +41,7 @@ const server = createServer((request: IncomingMessage, response: ServerResponse<
   } catch (error) {
     console.error(error);
   }
-  
-  response.statusCode = HTTP_STATUS_CODE.OK;
-  response.end(JSON.stringify(output));
+
 
 });
 

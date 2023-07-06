@@ -2,7 +2,7 @@ import * as Userdatabase from "../userdatabase/userdatabase";
 import { UserNoId, UserWithId } from "../types/types";
 import { IncomingMessage, ServerResponse } from "node:http";
 import { HTTP_STATUS_CODE } from "../constants";
-import { validUserId, validateUserData } from "../validations/validations";
+import { validUserId, validateUserKeys, validateUserFieldsType } from "../validations/validations";
 
 export const getAllUsers = (response: ServerResponse) => {
   try {
@@ -35,11 +35,14 @@ export const createUser = (request: IncomingMessage, response: ServerResponse) =
   try {
     const userData = getDataFromPostRequest(request);
 
-      validateUserData(userData, response);
+    if ( validateUserKeys(userData, response) && validateUserFieldsType(userData, response) ) {
+
       const newUser = Userdatabase.createUserWithId(userData);
 
       response.statusCode = HTTP_STATUS_CODE.CREATED;
       response.end(JSON.stringify(newUser));
+
+    }
     
   } catch (error) {
     console.error('Problem with creating user');

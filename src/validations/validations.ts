@@ -35,7 +35,7 @@ export const validateUserKeys = (userData: any, response: ServerResponse) => {
 };
 
 
-export const validateUserTypeFields = (user: UserNoId, response: ServerResponse) => {
+export const validateUserFieldsType = (user: UserNoId, response: ServerResponse) => {
   
   const isValid =
       typeof user.username === 'string' &&
