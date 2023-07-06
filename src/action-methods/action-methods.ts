@@ -84,10 +84,42 @@ export const updateUser = async (id: string, request: IncomingMessage, response:
         }
 
       } catch (error) {
-        console.error('Problem with upfating user');
+        console.error('Problem with updating user');
       }
 
   }
 
 };
+
+
+export const deleteUser = async (id: string, response: ServerResponse) => {
+
+  if (validUserId(id, response)) {
+
+    const userToDelete = Userdatabase.getUserById(id);
+
+    if (!userToDelete) {
+      response.statusCode = HTTP_STATUS_CODE.NOT_FOUND;
+      response.end(JSON.stringify({ message: `User with id: ${id} not found` }));
+      return;
+    }
+
+    try {
+
+      Userdatabase.removeUserById(id);
+
+      response.statusCode = HTTP_STATUS_CODE.DELETED;
+      response.end(JSON.stringify({ message: `User ${userToDelete} has been deleted!` }));
+
+    } catch (error) {
+      response.statusCode = HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR;
+      response.end(JSON.stringify({ message: `Problem with deleting user ${userToDelete}` }));
+      
+      console.error('Problem with deleting user');
+    }
+
+  }
+
+};
+
 
