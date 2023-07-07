@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "Implement simple CRUD API using in-memory database underneath.",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "tsc -w",
-    "start:dev": "nodemon ./dist/index.js"
+    "start:dev": "nodemon -w src src/index.ts",
+    "start:prod": "tsc && node dist/index.js"
   },
   "repository": {
     "type": "git",
