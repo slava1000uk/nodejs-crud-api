@@ -9,7 +9,7 @@ import { getIdFromRequestURL, hasRequestUrlId } from "./utils/utils"
 
 
 
-const server = createServer((request: IncomingMessage, response: ServerResponse<IncomingMessage>) => {
+const server = createServer( async (request: IncomingMessage, response: ServerResponse<IncomingMessage>) => {
   
   const isEndpointUsers:boolean = 
         (request.url === '/api/users') || (request.url === '/api/users/');
@@ -37,21 +37,42 @@ const server = createServer((request: IncomingMessage, response: ServerResponse<
 
       case HTTP_METHOD.POST:
         if (isEndpointUsers) {
-          createUser(request, response);
+          await createUser(request, response);
         } else {
           response.statusCode = HTTP_STATUS_CODE.BAD_REQUEST;
           response.end(JSON.stringify({ message: "Url is not correct" }));
         }
       break;
 
+
       case HTTP_METHOD.PUT:
-        
+        if (request.url && hasRequestUrlId(request.url)) {
+          const id = getIdFromRequestURL(request.url);
+          await updateUser(id, request, response);
+        } else {
+          response.statusCode = HTTP_STATUS_CODE.BAD_REQUEST;
+          response.end(JSON.stringify({
+            message: request.url ? "Url doesn't have user id" : "Url is not correct"
+          }));
+        }
       break;
-    
+
+
+      case HTTP_METHOD.DELETE:
+        if (request.url && hasRequestUrlId(request.url)) {
+          const id = getIdFromRequestURL(request.url);
+          await deleteUser(id, response);
+        } else {
+          response.statusCode = HTTP_STATUS_CODE.BAD_REQUEST;
+          response.end(JSON.stringify({
+            message: request.url ? "Url doesn't have user id" : "Url is not correct"
+          }));
+        }
+        break;
+
     }
-    
   } catch (error) {
-    console.error(error);
+    console.error("Url is not correct");
   }
 
 
