@@ -36,7 +36,11 @@ export const getOneUser = (id: string, response: ServerResponse) => {
 export const createUser = async (request: IncomingMessage, response: ServerResponse) => {
   try {
     const body = await getDataFromRequest(request);
+   
     const userData = JSON.parse(body);
+    
+   
+    
 
     if ( validateUserKeys(userData, response) && validateUserFieldsType(userData, response) ) {
 
@@ -48,7 +52,7 @@ export const createUser = async (request: IncomingMessage, response: ServerRespo
     }
     
   } catch (error) {
-    console.error('Problem with creating user');
+    console.error(error);
   }
 };
 
@@ -114,7 +118,7 @@ export const deleteUser = async (id: string, response: ServerResponse) => {
     } catch (error) {
       response.statusCode = HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR;
       response.end(JSON.stringify({ message: `Problem with deleting user ${userToDelete}` }));
-      
+
       console.error('Problem with deleting user');
     }
 

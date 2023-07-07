@@ -24,8 +24,9 @@ export const validateUserKeys = (userData: any, response: ServerResponse) => {
   const validKeys = ['username', 'age', 'hobbies'];
 
   const areKeysValid = Object.keys(userData).every(key => validKeys.includes(key));
+  const isCorrectAmountRequiredFields = (Object.keys(userData).length === 3);
 
-  if (!areKeysValid) {
+  if (!areKeysValid || !(isCorrectAmountRequiredFields) ) {
     response.statusCode = HTTP_STATUS_CODE.BAD_REQUEST;
     response.end(JSON.stringify({ message: 'Invalid fields in user!' }));
   }

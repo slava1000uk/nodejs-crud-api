@@ -65,7 +65,7 @@ const createUser = async (request, response) => {
         }
     }
     catch (error) {
-        console.error('Problem with creating user');
+        console.error(error);
     }
 };
 exports.createUser = createUser;

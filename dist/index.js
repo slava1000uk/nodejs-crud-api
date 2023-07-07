@@ -20,6 +20,7 @@ const server = (0, node_http_1.createServer)(async (request, response) => {
                 }
                 else if (request.url && (0, utils_1.hasRequestUrlId)(request.url)) {
                     const id = (0, utils_1.getIdFromRequestURL)(request.url);
+                    console.log(id);
                     (0, action_methods_1.getOneUser)(id, response);
                 }
                 else {

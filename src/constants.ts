@@ -16,4 +16,4 @@ export enum HTTP_STATUS_CODE {
   INTERNAL_SERVER_ERROR = 500
 }
 
-export const URL_BEFORE_ID_REGEXP = /^\/api\/users\/$/;
+export const URL_BEFORE_ID_REGEXP = /^\/api\/users\//;
