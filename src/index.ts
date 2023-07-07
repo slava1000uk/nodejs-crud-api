@@ -1,9 +1,7 @@
 import { IncomingMessage, ServerResponse, createServer } from "node:http";
 import { config } from "dotenv";
 import process from "node:process";
-import { randomUUID } from "node:crypto";
-import { HTTP_METHOD, HTTP_STATUS_CODE, DEFAULT_PORT, URL_BEFORE_ID_REGEXP } from "./constants";
-import { UserNoId, UserWithId } from "./types/types";
+import { HTTP_METHOD, HTTP_STATUS_CODE, DEFAULT_PORT } from "./constants";
 import { getAllUsers, getOneUser, createUser, updateUser, deleteUser } from "./action-methods/action-methods";
 import { getIdFromRequestURL, hasRequestUrlId } from "./utils/utils"
 
