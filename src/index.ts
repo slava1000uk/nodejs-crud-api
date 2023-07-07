@@ -12,7 +12,7 @@ const server = createServer( async (request: IncomingMessage, response: ServerRe
   const isEndpointUsers:boolean = 
         (request.url === '/api/users') || (request.url === '/api/users/');
 
-
+ 
   response.setHeader("Content-Type", "application/json");
 
   try {
@@ -59,7 +59,7 @@ const server = createServer( async (request: IncomingMessage, response: ServerRe
       case HTTP_METHOD.DELETE:
         if (request.url && hasRequestUrlId(request.url)) {
           const id = getIdFromRequestURL(request.url);
-          await deleteUser(id, response);
+          deleteUser(id, response);
         } else {
           response.statusCode = HTTP_STATUS_CODE.BAD_REQUEST;
           response.end(JSON.stringify({
@@ -70,7 +70,7 @@ const server = createServer( async (request: IncomingMessage, response: ServerRe
 
     }
   } catch (error) {
-    console.error("Url is not correct");
+    console.error("Url is not correct"); 
   }
 
 

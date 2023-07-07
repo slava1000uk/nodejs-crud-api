@@ -16,11 +16,12 @@ exports.validUserId = validUserId;
 const validateUserKeys = (userData, response) => {
     const validKeys = ['username', 'age', 'hobbies'];
     const areKeysValid = Object.keys(userData).every(key => validKeys.includes(key));
-    if (!areKeysValid) {
+    const isCorrectAmountRequiredFields = (Object.keys(userData).length === 3);
+    if (!areKeysValid || !(isCorrectAmountRequiredFields)) {
         response.statusCode = constants_1.HTTP_STATUS_CODE.BAD_REQUEST;
-        response.end(JSON.stringify({ message: 'Invalid fields in user!' }));
+        response.end(JSON.stringify({ message: 'User fields are not correct!' }));
     }
-    return areKeysValid;
+    return areKeysValid && isCorrectAmountRequiredFields;
 };
 exports.validateUserKeys = validateUserKeys;
 const validateUserFieldsType = (user, response) => {

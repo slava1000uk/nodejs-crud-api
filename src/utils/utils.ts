@@ -33,7 +33,7 @@ export const getDataFromRequest = (request: IncomingMessage): Promise<string> =>
       });
 
       request.on('error', () => {
-        reject('Invalid request');
+        reject('Invalid request!');
       });
 
     } catch (error) {

@@ -97,7 +97,7 @@ const updateUser = async (id, request, response) => {
     }
 };
 exports.updateUser = updateUser;
-const deleteUser = async (id, response) => {
+const deleteUser = (id, response) => {
     if ((0, validations_1.validUserId)(id, response)) {
         const userToDelete = Userdatabase.getUserById(id);
         if (!userToDelete) {
@@ -108,11 +108,11 @@ const deleteUser = async (id, response) => {
         try {
             Userdatabase.removeUserById(id);
             response.statusCode = constants_1.HTTP_STATUS_CODE.DELETED;
-            response.end(JSON.stringify({ message: `User ${userToDelete} has been deleted!` }));
+            response.end(JSON.stringify({ message: `User with id: ${id} has been deleted` }));
         }
         catch (error) {
             response.statusCode = constants_1.HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR;
-            response.end(JSON.stringify({ message: `Problem with deleting user ${userToDelete}` }));
+            response.end(JSON.stringify({ message: `Problem with deleting user with id: ${id}` }));
             console.error('Problem with deleting user');
         }
     }

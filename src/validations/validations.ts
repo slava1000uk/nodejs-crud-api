@@ -28,10 +28,10 @@ export const validateUserKeys = (userData: any, response: ServerResponse) => {
 
   if (!areKeysValid || !(isCorrectAmountRequiredFields) ) {
     response.statusCode = HTTP_STATUS_CODE.BAD_REQUEST;
-    response.end(JSON.stringify({ message: 'Invalid fields in user!' }));
+    response.end(JSON.stringify({ message: 'User fields are not correct!' }));
   }
    
-  return areKeysValid;
+  return areKeysValid && isCorrectAmountRequiredFields;
 
 };
 
