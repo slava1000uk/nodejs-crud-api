@@ -8,4 +8,4 @@ export interface UserWithId extends UserNoId {
   id: string;
 };
 
-export type UserDatabaseT = UserWithId[];
+export type UsersDatabaseT = UserWithId[];

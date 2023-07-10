@@ -1,34 +1,59 @@
-import { UserNoId, UserWithId } from "../types/types";
+import { UserNoId, UserWithId, UsersDatabaseT } from "../types/types";
 import { v4 as uuidv4 } from "uuid";
+import process from "node:process";
 
 let users: UserWithId[] = [];
 
-export const getAll = () => users;
+process.on('message', (message: UserWithId[]) => { users = message; });
 
-export const getUserById = (id: string) => {
-  const userById = users.find(user => user.id === id);
-  return userById;
+export const getAll = async (): Promise<UsersDatabaseT> => {
+  return new Promise((resolve) => {
+    process.send?.(users);
+    resolve(users);
+  })
 };
 
-export const createUserWithId = (user:UserNoId) => {
-  const userWithId = { ...user, id: uuidv4() };
+export const getUserById = async (id: string): Promise<UserWithId | undefined> => {
+  return new Promise((resolve) => {
+    const userById = users.find(user => user.id === id);
 
-  users.push(userWithId);
-
-  return userWithId;
-};
-
-export const updateUserById = (id:string, userData: UserNoId) => {
-  const indexToUpdateUser = users.findIndex(user => id === user.id);
-
-  users[indexToUpdateUser] = { ...users[indexToUpdateUser], ...userData };
-
-  return users[indexToUpdateUser];
+    process.send?.(users);
+    resolve(userById);
+  })
 
 };
 
-export const removeUserById = (id: string) => {
-  const indexToDeleteUser = users.findIndex(user => id === user.id);
+export const createUserWithId = async (user: UserNoId): Promise<UserWithId> => {
+  return new Promise((resolve) => {
+    const userWithId = { ...user, id: uuidv4() };
 
-  users.splice(indexToDeleteUser, 1);
+    users.push(userWithId);
+    process.send?.(users);
+
+    resolve(userWithId);
+  })
+};
+
+export const updateUserById = async (id: string, userData: UserNoId): Promise<UserWithId | undefined> => {
+  return new Promise((resolve) => {
+    const indexToUpdateUser = users.findIndex(user => id === user.id);
+
+    users[indexToUpdateUser] = { ...users[indexToUpdateUser], ...userData };
+
+    process.send?.(users);
+
+    resolve(users[indexToUpdateUser]);
+  })
+};
+
+export const removeUserById = async (id: string): Promise<void> => {
+  return new Promise((resolve) => {
+    const indexToDeleteUser = users.findIndex(user => id === user.id);
+
+    users.splice(indexToDeleteUser, 1);
+
+    process.send?.(users);
+    resolve();
+    
+  })
 };
