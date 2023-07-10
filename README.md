@@ -71,9 +71,10 @@ Users are stored as `objects` that have the following properties:
 - Fill the address input with http://localhost:4000/api/users
 - Choose method and send request.
 - Testing data for PUT request:
-  `{
-    "id": "95b8cb0c-3365-425e-8fa5-ac4fce61bcb2",
+  ```
+  {
+    "id": "70366ea4-24a9-4e28-aaa7-1b07be826fbb",
     "username": "Your Username",
     "age": 33,
     "hobbies": ["Node Js", "Nest Js"]
-  }`
+  }
