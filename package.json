@@ -1,0 +1,38 @@
+{
+  "name": "nodejs-crud-api",
+  "version": "1.0.0",
+  "description": "Implement simple CRUD API using in-memory database underneath.",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "nodemon --exec ts-node ./src/index.ts",
+    "start:prod": "tsc && node ./dist/index.js",
+    "start:multi": "tsc && node ./dist/loadBalancer.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slava1000uk/nodejs-crud-api.git"
+  },
+  "keywords": [
+    "crud",
+    "api"
+  ],
+  "author": "slava1000uk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/slava1000uk/nodejs-crud-api/issues"
+  },
+  "homepage": "https://github.com/slava1000uk/nodejs-crud-api#readme",
+  "devDependencies": {
+    "@types/node": "^20.3.3",
+    "nodemon": "^1.14.9",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@types/uuid": "^9.0.2",
+    "dotenv": "^16.3.1",
+    "uuid": "^9.0.0"
+  }
+}
