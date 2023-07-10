@@ -19,11 +19,11 @@ const server = createServer( async (request: IncomingMessage, response: ServerRe
     switch (request.method) {
       case HTTP_METHOD.GET:
         if (isEndpointUsers) {
-          getAllUsers(response);
+          await getAllUsers(response);
 
         } else if (request.url && hasRequestUrlId(request.url)) {
           const id = getIdFromRequestURL(request.url);
-          getOneUser(id, response);
+          await getOneUser(id, response);
         } else {
           response.statusCode = HTTP_STATUS_CODE.BAD_REQUEST;
           response.end(JSON.stringify({
@@ -59,7 +59,7 @@ const server = createServer( async (request: IncomingMessage, response: ServerRe
       case HTTP_METHOD.DELETE:
         if (request.url && hasRequestUrlId(request.url)) {
           const id = getIdFromRequestURL(request.url);
-          deleteUser(id, response);
+          await deleteUser(id, response);
         } else {
           response.statusCode = HTTP_STATUS_CODE.BAD_REQUEST;
           response.end(JSON.stringify({

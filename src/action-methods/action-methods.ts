@@ -5,9 +5,9 @@ import { HTTP_STATUS_CODE } from "../constants";
 import { validUserId, validateUserKeys, validateUserFieldsType } from "../validations/validations";
 import { getIdFromRequestURL, getDataFromRequest } from "../utils/utils";
 
-export const getAllUsers = (response: ServerResponse) => {
+export const getAllUsers = async (response: ServerResponse) => {
   try {
-    const allUsers = Userdatabase.getAll();
+    const allUsers = await Userdatabase.getAll();
 
     response.statusCode = HTTP_STATUS_CODE.OK;
     response.end(JSON.stringify(allUsers));
@@ -18,10 +18,10 @@ export const getAllUsers = (response: ServerResponse) => {
   }
 };
 
-export const getOneUser = (id: string, response: ServerResponse) => {
+export const getOneUser = async (id: string, response: ServerResponse) => {
     if (validUserId(id, response)) {
 
-      const user = Userdatabase.getUserById(id);
+      const user = await Userdatabase.getUserById(id);
 
       if (!user) {
         response.statusCode = HTTP_STATUS_CODE.NOT_FOUND;
@@ -44,7 +44,7 @@ export const createUser = async (request: IncomingMessage, response: ServerRespo
 
     if ( validateUserKeys(userData, response) && validateUserFieldsType(userData, response) ) {
 
-      const newUser = Userdatabase.createUserWithId(userData);
+      const newUser = await Userdatabase.createUserWithId(userData);
 
       response.statusCode = HTTP_STATUS_CODE.CREATED;
       response.end(JSON.stringify(newUser));
@@ -60,7 +60,7 @@ export const updateUser = async (id: string, request: IncomingMessage, response:
   
   if (validUserId(id, response)) {
 
-    const currentUser = Userdatabase.getUserById(id);
+    const currentUser = await Userdatabase.getUserById(id);
 
     if (!currentUser) {
       response.statusCode = HTTP_STATUS_CODE.NOT_FOUND;
@@ -80,7 +80,7 @@ export const updateUser = async (id: string, request: IncomingMessage, response:
             hobbies: newUserData.hobbies || currentUser.hobbies
           };
 
-          const updatedUser = Userdatabase.updateUserById(id, userDataToUpdate);
+          const updatedUser = await Userdatabase.updateUserById(id, userDataToUpdate);
 
           response.statusCode = HTTP_STATUS_CODE.OK;
           response.end(JSON.stringify(updatedUser));
@@ -96,11 +96,11 @@ export const updateUser = async (id: string, request: IncomingMessage, response:
 };
 
 
-export const deleteUser = (id: string, response: ServerResponse) => {
+export const deleteUser = async (id: string, response: ServerResponse) => {
 
   if (validUserId(id, response)) {
 
-    const userToDelete = Userdatabase.getUserById(id);
+    const userToDelete = await Userdatabase.getUserById(id);
 
     if (!userToDelete) {
       response.statusCode = HTTP_STATUS_CODE.NOT_FOUND;
@@ -110,7 +110,7 @@ export const deleteUser = (id: string, response: ServerResponse) => {
 
     try {
 
-      Userdatabase.removeUserById(id);
+      await Userdatabase.removeUserById(id);
 
       response.statusCode = HTTP_STATUS_CODE.DELETED;
       response.end(JSON.stringify({ message: `User with id: ${id} has been deleted` }));
